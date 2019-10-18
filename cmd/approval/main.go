@@ -23,6 +23,8 @@ func main() {
 	h := approval.NewHTTPHandler()
 
 	r.HandleFunc("/approval", h.Get).Methods("GET")
+	r.HandleFunc("/approval", h.Add).Methods("POST")
+	r.HandleFunc("/approval/{id}", h.Update).Methods("PUT")
 
 	log.Fatal(http.ListenAndServe(p, r))
 }

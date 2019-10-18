@@ -15,10 +15,10 @@ func NewHTTPHandler() *Handler {
 	return &Handler{}
 }
 
-func (h *Handler) Get(w http.ResponseWriter, req *http.Request) {
+func (h *Handler) List(w http.ResponseWriter, req *http.Request) {
 	log.Println("GET /")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(Get()); err != nil {
+	if err := json.NewEncoder(w).Encode(List()); err != nil {
 		// TODO: return an error
 		fmt.Println("error getting approvals", err)
 	}
@@ -61,5 +61,21 @@ func (h *Handler) Update(w http.ResponseWriter, req *http.Request) {
 	if err := json.NewEncoder(w).Encode(created); err != nil {
 		// TODO: return an error
 		fmt.Println("error getting approvals", err)
+	}
+}
+
+func (h *Handler) Get(w http.ResponseWriter, req *http.Request) {
+	params := mux.Vars(req)
+	id := params["id"]
+	log.Printf("GET with /%v", id)
+	a := Get(id)
+	if a != nil {
+		w.WriteHeader(http.StatusNotFound)
+	} else {
+		w.WriteHeader(http.StatusOK)
+		if err := json.NewEncoder(w).Encode(a); err != nil {
+			// TODO: return an error
+			fmt.Println("error getting approvals", err)
+		}
 	}
 }

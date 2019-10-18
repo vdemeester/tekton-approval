@@ -37,10 +37,21 @@ type Approval struct {
 
 type Status string
 
-func Get() []Approval {
+func List() []Approval {
 	mtx.RLock()
 	defer mtx.RUnlock()
 	return list
+}
+
+func Get(id string) *Approval {
+	mtx.RLock()
+	for _, a := range list {
+		if a.ID == id {
+			return &a
+		}
+	}
+	mtx.RUnlock()
+	return nil
 }
 
 func Add(name, url string, status Status) Approval {

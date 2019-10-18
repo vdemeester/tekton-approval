@@ -22,9 +22,9 @@ func main() {
 	r := mux.NewRouter()
 	h := approval.NewHTTPHandler()
 
-	r.HandleFunc("/approval", h.Get).Methods("GET")
+	r.HandleFunc("/approval", h.List).Methods("GET")
 	r.HandleFunc("/approval", h.Add).Methods("POST")
-	r.HandleFunc("/approval/{id}", h.Update).Methods("GET")
+	r.HandleFunc("/approval/{id}", h.Get).Methods("GET")
 	r.HandleFunc("/approval/{id}", h.Update).Methods("PUT")
 
 	log.Fatal(http.ListenAndServe(p, r))

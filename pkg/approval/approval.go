@@ -22,9 +22,16 @@ func init() {
 
 func initialiseList() {
 	list = []Approval{
-		{ID: "bml1l5i17s989p4h6vbg", Name: "Foo", URL: "https://foo.foo", Status: StatusUnknown},
-		{ID: "bml1l5ssss989p4h6vbg", Name: "Bar", URL: "https://bar.bar", Status: StatusDenied},
-		{ID: "bml1l5i17s98hhhh6vbg", Name: "Baz", URL: "https://baz.baz", Status: StatusApproved},
+		{ID: "bml1l5i17s989p4h6vbg", Name: "Foo", URL: "http://greeter1.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusUnknown},
+		{ID: "bml1l5ssss989p4h6vbg", Name: "Bar", URL: "http://greeter2.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusDenied},
+		{ID: "bml1l5i17s98hhhh6vbg", Name: "Baz", URL: "http://greeter3.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusApproved},
+		{ID: "bmlhce217s9fvu4h81eg", Name: "Baz", URL: "http://greeter4.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusApproved},
+		{ID: "bmlhcea17s9fvu4h81f0", Name: "Greeter", URL: "http://greeter5.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusUnknown},
+		{ID: "bmlhcpq17s9fvu4h81mg", Name: "Balade", URL: "http://greeter6.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusUnknown},
+		{ID: "bmlhcn217s9fvu4h81lg", Name: "Nature", URL: "http://greeter7.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusUnknown},
+		{ID: "bmlhcra17s9fvu4h81ng", Name: "Fire", URL: "http://greeter8.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusUnknown},
+		{ID: "bmlhcv217s9fvu4h81rg", Name: "Water", URL: "http://greeter9.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusUnknown},
+		{ID: "bmlhd1a17s9fvu4h81ug", Name: "Dance", URL: "http://greeter10.dev.apps.asnieres.devcluster.openshift.com/", Status: StatusUnknown},
 	}
 }
 

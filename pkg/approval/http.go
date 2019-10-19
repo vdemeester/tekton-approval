@@ -42,25 +42,27 @@ func (h *Handler) Add(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (h *Handler) Update(w http.ResponseWriter, req *http.Request) {
-	params := mux.Vars(req)
-	var approval Approval
-	if err := json.NewDecoder(req.Body).Decode(&approval); err != nil {
-		// TODO: return an error
-		fmt.Println("error creating approvals", err)
-	}
-	log.Printf("PUT with %v", approval)
-	if approval.ID == "" {
-		approval.ID = params["id"]
-	}
-	if approval.Status == "" {
-		approval.Status = StatusUnknown
-	}
-	created := Update(approval.ID, approval)
-	w.WriteHeader(http.StatusAccepted)
-	if err := json.NewEncoder(w).Encode(created); err != nil {
-		// TODO: return an error
-		fmt.Println("error getting approvals", err)
+func (h *Handler) Update(url string) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, req *http.Request) {
+		params := mux.Vars(req)
+		var approval Approval
+		if err := json.NewDecoder(req.Body).Decode(&approval); err != nil {
+			// TODO: return an error
+			fmt.Println("error creating approvals", err)
+		}
+		log.Printf("PUT with %v", approval)
+		if approval.ID == "" {
+			approval.ID = params["id"]
+		}
+		if approval.Status == "" {
+			approval.Status = StatusUnknown
+		}
+		created := Update(approval.ID, approval)
+		w.WriteHeader(http.StatusAccepted)
+		if err := json.NewEncoder(w).Encode(created); err != nil {
+			// TODO: return an error
+			fmt.Println("error getting approvals", err)
+		}
 	}
 }
 

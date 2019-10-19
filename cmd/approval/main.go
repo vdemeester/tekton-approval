@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	port = flag.Int("port", 8080, "port to expose the app on")
+	port        = flag.Int("port", 8080, "port to expose the app on")
+	triggersURL = flag.String("triggers", "", "URL to the triggers service")
 )
 
 func main() {
@@ -25,7 +26,7 @@ func main() {
 	r.HandleFunc("/approval", h.List).Methods("GET")
 	r.HandleFunc("/approval", h.Add).Methods("POST")
 	r.HandleFunc("/approval/{id}", h.Get).Methods("GET")
-	r.HandleFunc("/approval/{id}", h.Update).Methods("PUT")
+	r.HandleFunc("/approval/{id}", h.Update(*triggersURL)).Methods("PUT")
 
 	log.Fatal(http.ListenAndServe(p, r))
 }

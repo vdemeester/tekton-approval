@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	port        = flag.Int("port", 8080, "port to expose the app on")
+	port = flag.Int("port", 8080, "port to expose the app on")
+	// http://el-deploy-listener.demo.svc.cluster.local
 	triggersURL = flag.String("triggers", "", "URL to the triggers service")
 )
 

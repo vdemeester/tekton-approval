@@ -3,8 +3,11 @@ package approval
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -42,6 +45,11 @@ func (h *Handler) Add(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+type event struct {
+	from string
+	to   string
+}
+
 func (h *Handler) Update(url string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 		params := mux.Vars(req)
@@ -56,6 +64,40 @@ func (h *Handler) Update(url string) func(http.ResponseWriter, *http.Request) {
 		}
 		if approval.Status == "" {
 			approval.Status = StatusUnknown
+		}
+		if approval.Status == StatusApproved && url != "" { // HACK HACK HACK
+			e := event{from: "dev", to: "to"}
+			data, err := json.Marshal(e)
+			if err != nil {
+				log.Println("Error marshaling the error. ", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			req, err := http.NewRequest("POST", url, strings.NewReader(string(data)))
+			if err != nil {
+				log.Println("Error creating the request. ", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			req.Header.Set("Content-Type", "application/json")
+			client := &http.Client{Timeout: time.Second * 10}
+
+			resp, err := client.Do(req)
+			if err != nil {
+				log.Println("Error reading response. ", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			defer resp.Body.Close()
+
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				log.Println("Error reading body. ", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+
+			log.Printf("%s\n", body)
 		}
 		created := Update(approval.ID, approval)
 		w.WriteHeader(http.StatusAccepted)

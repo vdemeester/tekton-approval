@@ -24,6 +24,8 @@ func main() {
 	r := mux.NewRouter()
 	h := approval.NewHTTPHandler()
 
+	// Create room for static files serving
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("dist/tekton-approval//"))).Methods("GET")
 	r.HandleFunc("/approval", h.List).Methods("GET")
 	r.HandleFunc("/approval", h.Add).Methods("POST")
 	r.HandleFunc("/approval/{id}", h.Get).Methods("GET")

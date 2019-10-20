@@ -20,11 +20,15 @@ func NewHTTPHandler() *Handler {
 
 func (h *Handler) List(w http.ResponseWriter, req *http.Request) {
 	log.Println("GET /")
-	w.WriteHeader(http.StatusOK)
+	CORSEnabledFunction(w, req)
 	if err := json.NewEncoder(w).Encode(List()); err != nil {
 		// TODO: return an error
 		fmt.Println("error getting approvals", err)
 	}
+}
+func (h *Handler) Options(w http.ResponseWriter, req *http.Request) {
+	log.Println("OPTIONS /")
+	CORSEnabledFunction(w, req)
 }
 
 func (h *Handler) Add(w http.ResponseWriter, req *http.Request) {
@@ -33,6 +37,7 @@ func (h *Handler) Add(w http.ResponseWriter, req *http.Request) {
 		// TODO: return an error
 		fmt.Println("error creating approvals", err)
 	}
+	CORSEnabledFunction(w, req)
 	log.Printf("POST with %v", approval)
 	if approval.Status == "" {
 		approval.Status = StatusUnknown
@@ -58,6 +63,7 @@ func (h *Handler) Update(url string) func(http.ResponseWriter, *http.Request) {
 			// TODO: return an error
 			fmt.Println("error creating approvals", err)
 		}
+		CORSEnabledFunction(w, req)
 		log.Printf("PUT with %v", approval)
 		if approval.ID == "" {
 			approval.ID = params["id"]
@@ -111,6 +117,7 @@ func (h *Handler) Update(url string) func(http.ResponseWriter, *http.Request) {
 func (h *Handler) Get(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	id := params["id"]
+	CORSEnabledFunction(w, req)
 	log.Printf("GET with /%v", id)
 	a := Get(id)
 	if a != nil {
@@ -122,4 +129,18 @@ func (h *Handler) Get(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("error getting approvals", err)
 		}
 	}
+}
+
+func CORSEnabledFunction(w http.ResponseWriter, r *http.Request) {
+	// Set CORS headers for the preflight request
+	if r.Method == http.MethodOptions {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST,GET")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Access-Control-Max-Age", "3600")
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+	// Set CORS headers for the main request.
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 }

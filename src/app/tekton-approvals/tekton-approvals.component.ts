@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApprovalsService } from 'src/app/approvals.service';
 
 export interface ApprovalElement {
   name: string;
@@ -7,23 +8,10 @@ export interface ApprovalElement {
 }
 
 export enum Status {
-  UNKNOWN = 'UNKNOWN',
-  APPROVED = 'APPROVED',
-  DECLINED = 'DECLINED'
+  UNKNOWN = 'Unknown',
+  APPROVED = 'Approved',
+  DECLINED = 'Declined'
 }
-
-const ELEMENT_DATA: ApprovalElement[] = [
-  { url: 'http://test.com', name: 'Hydrogen', status: Status.UNKNOWN },
-  { url: 'http://test.com', name: 'Helium', status: Status.UNKNOWN },
-  { url: 'http://test.com', name: 'Lithium', status: Status.UNKNOWN },
-  { url: 'http://test.com', name: 'Beryllium', status: Status.APPROVED },
-  { url: 'http://test.com', name: 'Boron', status: Status.DECLINED },
-  { url: 'http://test.com', name: 'Carbon', status: Status.APPROVED },
-  { url: 'http://test.com', name: 'Nitrogen', status: Status.DECLINED },
-  { url: 'http://test.com', name: 'Oxygen', status: Status.APPROVED },
-  { url: 'http://test.com', name: 'Fluorine', status: Status.DECLINED },
-  { url: 'http://test.com', name: 'Neon', status: Status.DECLINED },
-];
 
 @Component({
   selector: 'app-tekton-approvals',
@@ -32,7 +20,11 @@ const ELEMENT_DATA: ApprovalElement[] = [
 })
 export class TektonApprovalsComponent {
 
-  displayedColumns: string[] = ['name', 'url', 'status'];
-  dataSource = ELEMENT_DATA;
+  public dataSource: ApprovalElement[];
+  public displayedColumns = ['name', 'url', 'status'];
+
+  constructor(private approvalsService: ApprovalsService) {
+    this.approvalsService.getApprovals().subscribe(data => this.dataSource = data);
+  }
 
 }

@@ -25,12 +25,12 @@ func main() {
 	h := approval.NewHTTPHandler()
 
 	// Create room for static files serving
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("dist/tekton-approval//"))).Methods("GET")
-	r.HandleFunc("/approval", h.Options).Methods("OPTIONS")
-	r.HandleFunc("/approval", h.List).Methods("GET")
-	r.HandleFunc("/approval", h.Add).Methods("POST")
+	r.HandleFunc("/approval/", h.Options).Methods("OPTIONS")
+	r.HandleFunc("/approval/", h.List).Methods("GET")
+	r.HandleFunc("/approval/", h.Add).Methods("POST")
 	r.HandleFunc("/approval/{id}", h.Get).Methods("GET")
 	r.HandleFunc("/approval/{id}", h.Update(*triggersURL)).Methods("PUT")
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("dist/tekton-approval/"))).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(p, r))
 }

@@ -12,7 +12,7 @@ export class ApprovalsService {
   }
 
   getApprovals(): Observable<any> {
-    return this.httpClient.get(`${ environment.addressUrl }/approval`,
+    return this.httpClient.get(`${ environment.addressUrl }/approval/`,
       {
         headers: new HttpHeaders(
           {

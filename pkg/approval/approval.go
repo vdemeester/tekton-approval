@@ -73,6 +73,7 @@ func Add(name, url string, status Status) Approval {
 	mtx.Unlock()
 	return a
 }
+
 func Update(id string, a Approval) Approval {
 	for i, aa := range list {
 		if aa.ID == id {
